@@ -32,3 +32,8 @@ check_commands() { #helpmsg: Test if a list of commands is available on the PATH
 		fi
 	done
 }
+
+update_license_copyright_year() { #helpmsg: Update copyright year in LICENSE file.
+	YEAR="$(date '+%Y')"
+	sed -i "s/Copyright [[:digit:]]\+/Copyright $YEAR/g" LICENSE
+}

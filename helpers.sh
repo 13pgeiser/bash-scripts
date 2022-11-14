@@ -23,6 +23,8 @@ source "$SCRIPT_DIR/helpers_base.sh"
 source "$SCRIPT_DIR/helpers_debian.sh"
 # shellcheck source=helpers_docker.sh
 source "$SCRIPT_DIR/helpers_docker.sh"
+# shellcheck source=helpers_python.sh
+source "$SCRIPT_DIR/helpers_python.sh"
 
 # Source local sourceme if it exists.
 if [ -e sourceme ]; then
