@@ -9,6 +9,16 @@ LANG=en_US.UTF_8
 # Current script folder
 SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
+# Set USER when running on msys.
+if [ "$OSTYPE" == "msys" ]; then
+	export USER="$USERNAME"
+fi
+
+# Gitlab-CI does not set the USER variable.
+if [ -z ${USER+x} ]; then
+	USER="unknown"
+fi
+
 echo "********************************************************************************"
 echo "* OSTYPE:        $OSTYPE"
 echo "* HOSTTYPE:      $HOSTTYPE"
