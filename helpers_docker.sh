@@ -67,7 +67,7 @@ dockerfile_create() { #helpmsg: Start the dockerfile
 	cat >$DOCKERFILE <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 # Configure current user
 ARG USER=host_user
 ARG UID=1000
