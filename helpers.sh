@@ -19,11 +19,23 @@ if [ -z ${USER+x} ]; then
 	USER="unknown"
 fi
 
+# Set TOOLS_FOLDER variable.
+if [ -z ${TOOLS_FOLDER+x} ]; then
+	TOOLS_FOLDER=$(realpath _tools)
+	export TOOLS_FOLDER
+fi
+
+# Update PATH
+mkdir -p "$TOOLS_FOLDER/bin"
+mkdir -p "$TOOLS_FOLDER/usr/bin"
+PATH="$TOOLS_FOLDER/bin:$TOOLS_FOLDER/usr/bin:$PATH"
+
 echo "********************************************************************************"
 echo "* OSTYPE:        $OSTYPE"
 echo "* HOSTTYPE:      $HOSTTYPE"
 echo "* USER:          $USER"
 echo "* SCRIPT_DIR:    $SCRIPT_DIR"
+echo "* TOOLS_FOLDER:  $TOOLS_FOLDER"
 echo "********************************************************************************"
 
 # Source helpers.

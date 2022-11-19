@@ -26,7 +26,6 @@ docker_configure() { #helpmsg: Basic compatibility for MSYS
 
 run_shfmt_and_shellcheck() { #helpmsg: Execute shfmt and shellcheck
 	docker_configure
-	install_debian_packages parallel
 	if [ -x "$(command -v parallel)" ]; then
 		parallel -v "$DOCKER_RUN_CMD" -v "$PWD":/mnt mvdan/shfmt -w /mnt/{} ::: "$@"
 		parallel -v "$DOCKER_RUN_CMD" -e SHELLCHECK_OPTS="" -v "$PWD":/mnt koalaman/shellcheck:stable -x {} ::: "$@"
