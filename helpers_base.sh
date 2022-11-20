@@ -150,10 +150,15 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 install_package() { #helpmsg: Install package
 	case "$OSTYPE" in
 	msys)
-		md5_url="$(grep "$1" <"$SCRIPT_DIR/msys_packages.txt")"
-		md5="$(echo "$md5_url" | cut -d " " -f1)"
-		url="$(echo "$md5_url" | cut -d " " -f2)"
+		md5_url="$(grep "^$1" <"$SCRIPT_DIR/msys_packages.txt")"
+		md5="$(echo "$md5_url" | cut -d " " -f2)"
+		url="$(echo "$md5_url" | cut -d " " -f3)"
+		dependencies="$(echo "$md5_url" | cut -d " " -f4-)"
 		download_unpack "$md5" "$url" "e" "" ""
+		if [ -n "$dependencies" ]; then
+			# shellcheck disable=SC2086
+			install_packages $dependencies
+		fi
 		;;
 	linux*)
 		install_debian_packages "$1"

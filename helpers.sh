@@ -41,6 +41,8 @@ echo "**************************************************************************
 # Source helpers.
 # shellcheck source=helpers_base.sh
 source "$SCRIPT_DIR/helpers_base.sh"
+# shellcheck source=helpers_cpp.sh
+source "$SCRIPT_DIR/helpers_cpp.sh"
 # shellcheck source=helpers_debian.sh
 source "$SCRIPT_DIR/helpers_debian.sh"
 # shellcheck source=helpers_docker.sh
