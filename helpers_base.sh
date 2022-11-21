@@ -35,7 +35,11 @@ check_commands() { #helpmsg: Test if a list of commands is available on the PATH
 
 update_license_copyright_year() { #helpmsg: Update copyright year in LICENSE file.
 	YEAR="$(date '+%Y')"
-	sed -i "s/Copyright [[:digit:]]\+/Copyright $YEAR/g" LICENSE
+	lic="LICENSE"
+	if [ -e LICENSE.md ]; then
+		lic="LICENSE.md"
+	fi
+	sed -i "s/Copyright [[:digit:]]\+/Copyright $YEAR/g" "$lic"
 }
 
 download() { #helpmsg: Download url (using curl) and verify the file (_download <md5> <url> [<archive>])
