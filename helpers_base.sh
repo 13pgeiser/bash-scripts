@@ -136,6 +136,14 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 			mkdir -p "$dst_folder"
 			tar -C "$dst_folder" -I zstd -xf "$TOOLS_FOLDER/$archive" 2>/dev/null 1>/dev/null
 			;;
+		"rar")
+			install_package unrar
+			mkdir -p "$dst_folder"
+			(
+				cd "$dst_folder" || exit
+				unrar x "$TOOLS_FOLDER/$archive" 2>/dev/null 1>/dev/null
+			)
+			;;
 		*)
 			die "Unsupported file extension: $extension"
 			;;
