@@ -67,11 +67,37 @@ install_zstd() {
 		local result
 		result=$(download_unpack 2109f0d91df9f98105ac993a62918400 https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip "ep" "" "")
 		if [ ! -e "$TOOLS_FOLDER/bin/zstd" ]; then
+			mkdir -p "$TOOLS_FOLDER/bin"
 			cp "$result/zstd" "$TOOLS_FOLDER/bin"
 		fi
 		;;
 	linux*)
 		install_debian_packages zstd
+		;;
+	*)
+		die "Unsupported OS: $OSTYPE"
+		;;
+	esac
+}
+
+install_7zip() { #helpmsg: install 7zip
+	case "$OSTYPE" in
+	msys)
+		seven_zip=$(download_unpack 2fac454a90ae96021f4ffc607d4c00f8 https://www.7-zip.org/a/7za920.zip "ce" "" "")
+		local archive
+		local folder
+		local url
+		url="https://7-zip.org/a/7z2201-x64.exe"
+		archive="$(basename $url)"
+		folder="${archive%.*}"
+		download a6a0f7c173094f8dafef996157751ecf $url ""
+		if [ ! -d "$TOOLS_FOLDER/$folder" ]; then
+			"$seven_zip/7za" x "-o$TOOLS_FOLDER/$folder" "$TOOLS_FOLDER/$archive" 2>/dev/null 1>/dev/null
+		fi
+		path_add "$TOOLS_FOLDER/$folder"
+		;;
+	linux*)
+		install_debian_packages p7zip-full
 		;;
 	*)
 		die "Unsupported OS: $OSTYPE"
@@ -109,6 +135,7 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 		folder="${folder%.*}"
 		extension="$extension_bis.$extension"
 	fi
+	mkdir -p "$TOOLS_FOLDER"
 	if echo "$3" | grep -q 'c'; then
 		dst_folder="$TOOLS_FOLDER/$folder"
 	else
@@ -144,6 +171,11 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 				unrar x "$TOOLS_FOLDER/$archive" 2>/dev/null 1>/dev/null
 			)
 			;;
+		"7z")
+			install_7zip
+			7z x -o"$dst_folder" "$TOOLS_FOLDER/$archive" 2>/dev/null 1>/dev/null
+			;;
+
 		*)
 			die "Unsupported file extension: $extension"
 			;;
@@ -151,7 +183,7 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 		touch "$dst_folder/.$archive"
 	fi
 	if echo "$3" | grep -q 'p'; then
-		PATH="$dst_folder:$PATH"
+		path_add "dst_folder"
 	fi
 	result="$TOOLS_FOLDER/$folder"
 	if echo "$3" | grep -q 'e'; then
@@ -162,11 +194,11 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 install_package() { #helpmsg: Install package
 	case "$OSTYPE" in
 	msys)
-		md5_url="$(grep "^$1" <"$SCRIPT_DIR/msys_packages.txt")"
+		md5_url="$(grep "^$1[[:space:]]" <"$SCRIPT_DIR/msys_packages.txt")"
 		md5="$(echo "$md5_url" | cut -d " " -f2)"
 		url="$(echo "$md5_url" | cut -d " " -f3)"
 		dependencies="$(echo "$md5_url" | cut -d " " -f4-)"
-		download_unpack "$md5" "$url" "e" "" ""
+		download_unpack "$md5" "$url" "" "" ""
 		if [ -n "$dependencies" ]; then
 			# shellcheck disable=SC2086
 			install_packages $dependencies

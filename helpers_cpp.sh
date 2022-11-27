@@ -8,12 +8,12 @@ install_gcc_arm_none_eabi() { #helpmsg: Install gcc for arm target.
 	msys)
 		local result
 		result=$(download_unpack 82525522fefbde0b7811263ee8172b10 https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC2.1/gcc-arm-none-eabi-9-2019-q4-major-win32.zip.bz2 "ce" "gcc-arm-none-eabi-9-2019-q4-major-win32.zip" "")
-		PATH="$result/bin:$PATH"
+		path_add "$result/bin"
 		;;
 	linux*)
 		local result
 		result=$(download_unpack fe0029de4f4ec43cf7008944e34ff8cc https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/RC2.1/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2 "ce" "" "")
-		PATH="$result/gcc-arm-none-eabi-9-2019-q4-major/bin:$PATH"
+		path_add "$result/gcc-arm-none-eabi-9-2019-q4-major/bin"
 		;;
 	*)
 		die "Unsupported OS: $OSTYPE"
@@ -54,7 +54,7 @@ install_cmake() { #helpmsg: Install cmake
 	msys)
 		local result
 		result=$(download_unpack 1eea56fc6999da745caa86bac06279ee https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0-windows-x86_64.zip "e" "" "")
-		PATH="$result/bin:$PATH"
+		path_add "$result/bin"
 		;;
 	linux*)
 		install_debian_packages cmake

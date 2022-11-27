@@ -26,9 +26,16 @@ if [ -z ${TOOLS_FOLDER+x} ]; then
 fi
 
 # Update PATH
-mkdir -p "$TOOLS_FOLDER/bin"
-mkdir -p "$TOOLS_FOLDER/usr/bin"
-PATH="$TOOLS_FOLDER/bin:$TOOLS_FOLDER/usr/bin:$PATH"
+path_add() {
+	in_path="$(echo "$PATH" | tr  ":" "\n" | grep "^$1" || true)"
+	if [ -z "$in_path" ]; then
+		PATH="$1:$PATH"
+	fi
+}
+
+path_add "$TOOLS_FOLDER/mingw64/bin"
+path_add "$TOOLS_FOLDER/usr/bin"
+path_add "$TOOLS_FOLDER/bin"
 
 echo "********************************************************************************"
 echo "* OSTYPE:        $OSTYPE"
@@ -51,12 +58,6 @@ source "$SCRIPT_DIR/helpers_docker.sh"
 source "$SCRIPT_DIR/helpers_python.sh"
 # shellcheck source=helpers_qemu.sh
 source "$SCRIPT_DIR/helpers_qemu.sh"
-
-# Source local sourceme if it exists.
-if [ -e sourceme ]; then
-	# shellcheck disable=SC1091
-	source sourceme
-fi
 
 if [ "${BASH_SOURCE[0]}" == "${0}" ]; then
 	echo "This script is designed to be sourced!"

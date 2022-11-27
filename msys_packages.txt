@@ -5,3 +5,4 @@ ninja-build eb7e2fd4ff9e70a67f8021823380f6f5 https://repo.msys2.org/msys/x86_64/
 subversion 15fe309caef5a61aba89bb5960a67103 https://repo.msys2.org/msys/x86_64/subversion-1.14.0-7-x86_64.pkg.tar.zst
 unrar 4617877eeadc8e684e9dd43d253da241 https://repo.msys2.org/msys/x86_64/unrar-6.1.4-2-x86_64.pkg.tar.zst gcc-libs
 gcc-libs 7f3f0e69fe83a67a6f118552c3227b01 https://repo.msys2.org/msys/x86_64/gcc-libs-11.3.0-2-x86_64.pkg.tar.zst
+gcc 712936e7ce648c9b3bde8b83a56bb073 https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev1/x86_64-12.2.0-release-posix-seh-rt_v10-rev1.7z
