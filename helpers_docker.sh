@@ -25,6 +25,10 @@ docker_configure() { #helpmsg: Basic compatibility for MSYS
 }
 
 run_shfmt_and_shellcheck() { #helpmsg: Execute shfmt and shellcheck
+	if [ ! -x "$(command -v docker)" ]; then
+		echo "Docker not found. Skipping checks"
+		return
+	fi
 	docker_configure
 	if [ -x "$(command -v parallel)" ]; then
 		parallel -v "$DOCKER_RUN_CMD" -v "$PWD":/mnt mvdan/shfmt -w /mnt/{} ::: "$@"
