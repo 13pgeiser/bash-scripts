@@ -27,7 +27,7 @@ fi
 
 # Update PATH
 path_add() {
-	in_path="$(echo "$PATH" | tr  ":" "\n" | grep "^$1" || true)"
+	in_path="$(echo "$PATH" | tr ":" "\n" | grep "^$1" || true)"
 	if [ -z "$in_path" ]; then
 		PATH="$1:$PATH"
 	fi
