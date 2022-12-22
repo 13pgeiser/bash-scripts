@@ -9,8 +9,11 @@ docker_configure() { #helpmsg: Basic compatibility for MSYS
 	if [ "$OSTYPE" == "msys" ]; then
 		docker() {
 			#MSYS_NO_PATHCONV=1 docker.exe "$@"
+			# shellcheck disable=SC2317
 			(
+				# shellcheck disable=SC2317
 				export MSYS_NO_PATHCONV=1
+				# shellcheck disable=SC2317
 				"docker.exe" "$@"
 			)
 		}
@@ -67,7 +70,7 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 }
 
 dockerfile_create() { #helpmsg: Start the dockerfile
-	cat >$DOCKERFILE <<'EOF'
+	cat >"$DOCKERFILE" <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
 FROM debian:bullseye-slim
@@ -83,7 +86,7 @@ EOF
 }
 
 dockerfile_setup_python() { #helpmsg: Install python3 + pip + setuptools + venv
-	cat >>$DOCKERFILE <<'EOF'
+	cat >>"$DOCKERFILE" <<'EOF'
 # Install the bare minimum to use python
 RUN 	apt-get update && \
         apt-get dist-upgrade -y && \
@@ -107,7 +110,7 @@ EOF
 }
 
 dockerfile_switch_to_user() { #helpmsg: switch to the user in the dockerfile and set workdir
-	cat >>$DOCKERFILE <<'EOF'
+	cat >>"$DOCKERFILE" <<'EOF'
 USER $USER
 ENV PATH="/home/${USER}/.local/bin:${PATH}"
 WORKDIR /mnt
