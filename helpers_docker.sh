@@ -52,8 +52,9 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 	export IMAGE_NAME
 	VOLUME_NAME="${USER}_home"
 	export VOLUME_NAME
-	DOCKERFILE="Dockerfile"
+	DOCKERFILE="docker/Dockerfile"
 	export DOCKERFILE
+	mkdir -p docker
 	DOCKER_BUILDKIT=1
 	export DOCKER_BUILDKIT
 	DOCKER_RUN_BASE="$DOCKER_RUN_CMD -v $VOLUME_NAME:/home/$USER -v $(pwd):/mnt --name ${IMAGE_NAME}_container"
@@ -66,7 +67,10 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 
 docker_build_image_and_create_volume() { # create the volume for the home user and build the docker image
 	docker volume create "$VOLUME_NAME"
-	docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
+	(
+		cd docker || exit 1
+		docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
+	)
 }
 
 dockerfile_create() { #helpmsg: Start the dockerfile
@@ -107,6 +111,46 @@ COPY ./requirements.txt /
 RUN python3 -m pip install -r requirements.txt
 EOF
 	fi
+}
+
+dockerfile_setup_debootstrap() { #helpmsg: Install debootstrap + qemu-user-static and build deps.
+	cat >>"$DOCKERFILE" <<'EOF'
+RUN set -ex \
+    && apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+	bc \
+	binfmt-support \
+	bison \
+	build-essential \
+	ca-certificates \
+	cpio \
+	debootstrap \
+	device-tree-compiler \
+	dh-exec \
+	fakeroot \
+	fdisk \
+	figlet \
+	flex \
+	git \
+	gzip \
+	libssl-dev \
+	kernel-wedge \
+	kmod \
+	ncurses-dev \
+	parted \
+	python3 \
+	qemu-user-static \
+	quilt \
+	rsync \
+	swig \
+	u-boot-tools \
+	vboot-kernel-utils \
+	xz-utils \
+	zip \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+EOF
 }
 
 dockerfile_switch_to_user() { #helpmsg: switch to the user in the dockerfile and set workdir

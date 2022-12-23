@@ -80,3 +80,30 @@ call_cmake() { #helpmsg: Correctly call cmake both on Linux and Msys2
 		;;
 	esac
 }
+
+git_clone() { #helpmsg: Clone repo if does not exists yet
+	# 1 : folder
+	# 2 : url
+	# 3 : branch or tag
+	if [ ! -d "$1" ]; then
+		git clone "$2" "$1"
+		(
+			cd "$1" || exit 1
+			git checkout "$3" -b "$(basename "$3")"
+		)
+	fi
+}
+
+apply_patches() { #helpmsg: Clone repo if does not exists yet
+	# 1 : folder
+	# 2 : patch folder
+	if [ ! -e "$1/.patched" ]; then
+		(
+			cd "$1" || exit 1
+			for patch in "$2"/*.patch; do
+				patch -p1 <"$patch"
+			done
+		)
+		touch "$1/.patched"
+	fi
+}
