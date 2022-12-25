@@ -66,7 +66,6 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 
 docker_build_image_and_create_volume() { # create the volume for the home user and build the docker image
 	docker volume create "$VOLUME_NAME"
-	mkdir -p docker
 	(
 
 		cd docker || exit 1
@@ -75,6 +74,7 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 }
 
 dockerfile_create() { #helpmsg: Start the dockerfile
+	mkdir -p docker
 	cat >"$DOCKERFILE" <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
