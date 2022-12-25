@@ -85,11 +85,22 @@ git_clone() { #helpmsg: Clone repo if does not exists yet
 	# 1 : folder
 	# 2 : url
 	# 3 : branch or tag
-	if [ ! -d "$1" ]; then
-		git clone "$2" "$1"
+	if [ ! -d "$TOOLS_FOLDER/$1" ]; then
 		(
-			cd "$1" || exit 1
-			git checkout "$3" -b "$(basename "$3")"
+			mkdir -p "$TOOLS_FOLDER"
+			cd "$TOOLS_FOLDER" || exit 1
+			git clone "$2" "$1"
+			(
+				cd "$1" || exit 1
+				case "$3" in
+				tags/*)
+					git checkout "$3" -b "$(basename "$3")"
+					;;
+				*)
+					git checkout "$3"
+					;;
+				esac
+			)
 		)
 	fi
 }

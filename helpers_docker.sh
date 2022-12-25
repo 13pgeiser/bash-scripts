@@ -54,7 +54,6 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 	export VOLUME_NAME
 	DOCKERFILE="docker/Dockerfile"
 	export DOCKERFILE
-	mkdir -p docker
 	DOCKER_BUILDKIT=1
 	export DOCKER_BUILDKIT
 	DOCKER_RUN_BASE="$DOCKER_RUN_CMD -v $VOLUME_NAME:/home/$USER -v $(pwd):/mnt --name ${IMAGE_NAME}_container"
@@ -67,9 +66,11 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 
 docker_build_image_and_create_volume() { # create the volume for the home user and build the docker image
 	docker volume create "$VOLUME_NAME"
+	mkdir -p docker
 	(
+
 		cd docker || exit 1
-		docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
+		DOCKER_BUILDKIT=0 docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
 	)
 }
 
@@ -86,6 +87,19 @@ RUN groupadd -g $GID -o $USER
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USER
 RUN mkdir -p /work
 RUN chown -R ${USER}.${USER} /work
+EOF
+}
+
+dockerfile_sudo() { #helpmsg: Setup sudo for current user
+	cat >>"$DOCKERFILE" <<'EOF'
+RUN set -ex \
+    && apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+	sudo \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+RUN echo "$USER ALL=(ALL:ALL) NOPASSWD:ALL" >>/etc/sudoers
 EOF
 }
 
@@ -125,6 +139,7 @@ RUN set -ex \
 	build-essential \
 	ca-certificates \
 	cpio \
+	curl \
 	debootstrap \
 	device-tree-compiler \
 	dh-exec \
@@ -139,13 +154,16 @@ RUN set -ex \
 	kmod \
 	ncurses-dev \
 	parted \
+	python \
 	python3 \
 	qemu-user-static \
 	quilt \
 	rsync \
 	swig \
 	u-boot-tools \
+	udev \
 	vboot-kernel-utils \
+	wget \
 	xz-utils \
 	zip \
     && apt-get clean \
