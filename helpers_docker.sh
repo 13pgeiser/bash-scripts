@@ -166,6 +166,7 @@ RUN set -ex \
 	wget \
 	xz-utils \
 	zip \
+	zstd \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 EOF
