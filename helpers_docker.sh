@@ -67,7 +67,7 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 	(
 
 		cd docker || exit 1
-		docker build . --tag "$IMAGE_NAME" --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
+		docker build --tag "$IMAGE_NAME" --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER" .
 	)
 }
 
