@@ -21,7 +21,7 @@ fi
 
 # Set TOOLS_FOLDER variable.
 if [ -z ${TOOLS_FOLDER+x} ]; then
-	TOOLS_FOLDER=$(realpath _tools)
+	TOOLS_FOLDER="${SCRIPT_DIR}/_tools)"
 	export TOOLS_FOLDER
 fi
 
