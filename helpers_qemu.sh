@@ -32,7 +32,7 @@ qemu_copy_ssh_keys() { #helpmsg: Copy public key for SSH connection. Usage: copy
 }
 
 qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdrom"
-	install_debian_packages qemu-kvm qemu-utils cpu-checker
+	install_debian_packages qemu-system-x86 qemu-utils cpu-checker
 	if [ ! -e hda.tmp ]; then
 		qemu-img create -f qcow2 hda.tmp "$2"
 	fi
