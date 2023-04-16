@@ -54,8 +54,6 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 	export VOLUME_NAME
 	DOCKERFILE="docker/Dockerfile"
 	export DOCKERFILE
-	DOCKER_BUILDKIT=1
-	export DOCKER_BUILDKIT
 	DOCKER_RUN_BASE="$DOCKER_RUN_CMD -v $VOLUME_NAME:/home/$USER -v $(pwd):/mnt --name ${IMAGE_NAME}_container"
 	export DOCKER_RUN_BASE
 	DOCKER_RUN_I="$DOCKER_RUN_BASE -i $IMAGE_NAME"
@@ -69,12 +67,12 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 	(
 
 		cd docker || exit 1
-		DOCKER_BUILDKIT=0 docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
+		docker build -t "$IMAGE_NAME" . --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER"
 	)
 }
 
 dockerfile_create() { #helpmsg: Start the dockerfile
-	mkdir -p docker
+	mkdir -p "$(dirname $DOCKERFILE)"
 	cat >"$DOCKERFILE" <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
@@ -179,3 +177,10 @@ ENV PATH="/home/${USER}/.local/bin:${PATH}"
 WORKDIR /mnt
 EOF
 }
+
+dockerfile_copy() {  #helpmsg: switch to the user in the dockerfile and set workdir
+	if [ ! -e "$(dirname $DOCKERFILE)/$1" ]; then
+		cp "$1" "$(dirname $DOCKERFILE)/"
+	fi
+}
+
