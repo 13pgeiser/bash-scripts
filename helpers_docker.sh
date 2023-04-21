@@ -170,6 +170,47 @@ RUN set -ex \
 EOF
 }
 
+dockerfile_appimage() {
+	cat >>$DOCKERFILE <<'EOF'
+# Install base deps
+RUN set -ex \
+    && apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+	git \
+	ca-certificates \
+	build-essential \
+	cmake \
+	autoconf \
+	automake \
+	libtool \
+	pkg-config \
+	wget \
+	xxd \
+	desktop-file-utils \
+	libglib2.0-dev \
+	libcairo2-dev \
+	fuse \
+	libfuse-dev \
+	zsync \
+	yasm \
+	strace \
+	adwaita-icon-theme \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+EOF
+	if [ -f AppRun ]; then
+		cat >>$DOCKERFILE <<'EOF'
+COPY AppRun /work/AppDir/AppRun
+RUN set -ex \
+    && chmod a+x /work/AppDir/AppRun \
+    && wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -P /work \
+    && chmod +x /work/appimagetool-x86_64.AppImage
+RUN chown -R ${USER}.${USER} /work
+EOF
+	fi
+}
+
 dockerfile_switch_to_user() { #helpmsg: switch to the user in the dockerfile and set workdir
 	cat >>"$DOCKERFILE" <<'EOF'
 USER $USER
