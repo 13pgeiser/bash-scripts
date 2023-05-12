@@ -144,7 +144,7 @@ download_unpack() { #helpmsg: Download and unpack archive (_download_unpack <md5
 	if [ ! -e "$dst_folder/.$archive" ]; then
 		case "$extension" in
 		"zip")
-			install_package unzip
+			install_package unzip 2>/dev/null 1>/dev/null
 			unzip -q "$TOOLS_FOLDER/$archive" -d "$dst_folder" 2>/dev/null 1>/dev/null
 			;;
 		"tgz" | "tar.gz")

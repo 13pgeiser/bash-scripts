@@ -72,7 +72,7 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 }
 
 dockerfile_create() { #helpmsg: Start the dockerfile
-	mkdir -p "$(dirname $DOCKERFILE)"
+	mkdir -p "$(dirname "$DOCKERFILE")"
 	cat >"$DOCKERFILE" <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
@@ -171,7 +171,7 @@ EOF
 }
 
 dockerfile_appimage() {
-	cat >>$DOCKERFILE <<'EOF'
+	cat >>"$DOCKERFILE" <<'EOF'
 # Install base deps
 RUN set -ex \
     && apt-get update \
@@ -200,7 +200,7 @@ RUN set -ex \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 EOF
 	if [ -f AppRun ]; then
-		cat >>$DOCKERFILE <<'EOF'
+		cat >>"$DOCKERFILE" <<'EOF'
 COPY AppRun /work/AppDir/AppRun
 RUN set -ex \
     && chmod a+x /work/AppDir/AppRun \
@@ -219,9 +219,8 @@ WORKDIR /mnt
 EOF
 }
 
-dockerfile_copy() {  #helpmsg: switch to the user in the dockerfile and set workdir
-	if [ ! -e "$(dirname $DOCKERFILE)/$1" ]; then
-		cp "$1" "$(dirname $DOCKERFILE)/"
+dockerfile_copy() { #helpmsg: switch to the user in the dockerfile and set workdir
+	if [ ! -e "$(dirname "$DOCKERFILE")/$1" ]; then
+		cp "$1" "$(dirname "$DOCKERFILE")/"
 	fi
 }
-
