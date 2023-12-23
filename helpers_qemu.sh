@@ -42,7 +42,7 @@ qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdro
     -hda hda.tmp \
     -cdrom $3 \
     -smp cpus=$(getconf _NPROCESSORS_ONLN) \
-    -m 1024 \
+    -m 2048 \
     -vga qxl \
     -vnc :0 \
     -net nic,model=virtio \
