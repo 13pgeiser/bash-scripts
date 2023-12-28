@@ -43,6 +43,7 @@ update_license_copyright_year() { #helpmsg: Update copyright year in LICENSE fil
 }
 
 download() { #helpmsg: Download url (using curl) and verify the file (_download <md5> <url> [<archive>])
+	install_debian_packages curl
 	check_commands curl md5sum
 	local archive
 	if [ -z "$3" ]; then
