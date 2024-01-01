@@ -17,7 +17,7 @@ setup_virtual_env() { #helpmsg: Setup a virtual environment in current folder (i
 	# Setup VENV
 	if [ ! -e "$(pwd)/venv" ]; then
 		if [ "$OSTYPE" == "msys" ]; then
-			if [ -e /c/Python37/python.exe ]; then
+			if [ -e /c/Python310/python.exe ]; then
 				PYTHON3=/c/Python310/python.exe
 			else
 				PYTHON3=/usr/bin/python3.7
