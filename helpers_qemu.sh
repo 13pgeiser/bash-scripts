@@ -52,6 +52,7 @@ qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdro
 			QEMU_CMD="$QEMU_CMD -enable-kvm"
 		fi
 	fi
+	QEMU_CMD="$QEMU_CMD -bios /usr/share/OVMF/OVMF_CODE.fd"
 	echo "$QEMU_CMD"
 	if fuser qemu.pid; then
 		echo "Qemu is already running!"
