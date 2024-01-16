@@ -43,7 +43,7 @@ update_license_copyright_year() { #helpmsg: Update copyright year in LICENSE fil
 }
 
 download() { #helpmsg: Download url (using curl) and verify the file (_download <md5> <url> [<archive>])
-	install_debian_packages curl
+	install_debian_packages curl 2>/dev/null 1>/dev/null
 	check_commands curl md5sum
 	local archive
 	if [ -z "$3" ]; then
@@ -67,6 +67,7 @@ install_zstd() {
 	msys)
 		local result
 		result=$(download_unpack 2109f0d91df9f98105ac993a62918400 https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip "ep" "" "")
+		echo "RES $result"
 		if [ ! -e "$TOOLS_FOLDER/bin/zstd" ]; then
 			mkdir -p "$TOOLS_FOLDER/bin"
 			cp "$result/zstd" "$TOOLS_FOLDER/bin"
