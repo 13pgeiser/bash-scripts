@@ -120,7 +120,7 @@ EOF
 		cat <<EOF >>"$DOCKERFILE"
 # Copy requirements and install them
 COPY ./requirements.txt /
-RUN python3 -m pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt --break-system-packages
 EOF
 	fi
 }
