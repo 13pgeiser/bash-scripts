@@ -5,33 +5,29 @@
 # https://github.com/13pgeiser/bash-scripts.git
 
 docker_configure() { #helpmsg: Basic compatibility for MSYS
+	DOCKER_RUN_CMD=""
 	DOCKER_FLAGS=""
 	if [ "$OSTYPE" == "msys" ]; then
-		docker() {
-			#MSYS_NO_PATHCONV=1 docker.exe "$@"
-			# shellcheck disable=SC2317
-			(
-				# shellcheck disable=SC2317
-				export MSYS_NO_PATHCONV=1
-				# shellcheck disable=SC2317
-				"docker.exe" "$@"
-			)
-		}
-		export -f docker
-	else
-		if [ "$(getent group docker)" ]; then
-			DOCKER_FLAGS="--group-add $(getent group docker | cut -d: -f3) -v /var/run/docker.sock:/var/run/docker.sock"
-		fi
+		export MSYS_NO_PATHCONV=1
 	fi
-	DOCKER_RUN_CMD="docker run --rm  $DOCKER_FLAGS -u $(id -u):$(id -g)"
+	if [ -x "$(command -v podman)" ]; then
+		alias docker=podman
+		DOCKER_RUN_CMD="podman"
+	elif [ -x "$(command -v docker)" ]; then
+		DOCKER_RUN_CMD="docker"
+		if [ "$OSTYPE" != "msys" ]; then
+			if [ "$(getent group docker)" ]; then
+				DOCKER_FLAGS="--group-add $(getent group docker | cut -d: -f3) -v /var/run/docker.sock:/var/run/docker.sock"
+			fi
+		fi
+	else
+		DOCKER_RUN_CMD="echo docker"
+	fi
+	DOCKER_RUN_CMD="$DOCKER_RUN_CMD run --rm  $DOCKER_FLAGS -u $(id -u):$(id -g)"
 	export DOCKER_RUN_CMD
 }
 
 run_shfmt_and_shellcheck() { #helpmsg: Execute shfmt and shellcheck
-	if [ ! -x "$(command -v docker)" ]; then
-		echo "Docker not found. Skipping checks"
-		return
-	fi
 	docker_configure
 	if [ -x "$(command -v parallel)" ]; then
 		parallel -v "$DOCKER_RUN_CMD" -v "$PWD":/mnt mvdan/shfmt -w /mnt/{} ::: "$@"
