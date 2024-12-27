@@ -53,7 +53,7 @@ download() { #helpmsg: Download url (using curl) and verify the file (_download 
 	fi
 	if [ ! -e "$TOOLS_FOLDER/$archive" ]; then
 		mkdir -p "$TOOLS_FOLDER"
-		cmd="curl -kSL $2 --progress-bar -o $TOOLS_FOLDER/${archive}.tmp"
+		cmd="curl -kSL $2 --progress-bar -o $(realpath --relative-to=${PWD} $TOOLS_FOLDER/${archive}.tmp)"
 		$cmd
 		if [[ "$(md5sum "$TOOLS_FOLDER/${archive}.tmp" | cut -d' ' -f1)" != "$1" ]]; then
 			die "Invalid md5sum for $archive: $(md5sum "TOOLS_FOLDER/${archive}.tmp")"
