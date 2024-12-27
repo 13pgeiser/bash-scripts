@@ -1,4 +1,4 @@
-make 67b4e01b63b1541819eb6ac64e1054bc https://repo.msys2.org/msys/x86_64/make-4.3-4-x86_64.pkg.tar.zst
+make 04d2bce62672bb702af8c3494619d2ba https://repo.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst
 tree 400a7d3ddf8ace0b66f3c14a649557ca https://repo.msys2.org/msys/x86_64/tree-2.0.4-1-x86_64.pkg.tar.zst
 parallel ca9eb49237bc86aa72582f9775baa672 https://repo.msys2.org/msys/x86_64/parallel-20200322-1-any.pkg.tar.xz
 ninja-build eb7e2fd4ff9e70a67f8021823380f6f5 https://repo.msys2.org/msys/x86_64/ninja-1.11.1-1-x86_64.pkg.tar.zst
