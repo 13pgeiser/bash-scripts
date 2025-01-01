@@ -16,9 +16,11 @@ qemu_wait_for_ssh() { #helpmsg: Wait for SSH connection. Usage: wait_for_ssh "us
 
 qemu_copy_ssh_keys() { #helpmsg: Copy public key for SSH connection. Usage: copy_ssh_keys "user@host" "port"
 	install_debian_packages sshpass openssh-client
-	if [ ! -e "$HOME/.ssh/id_rsa" ]; then
-		mkdir -p "$HOME/.ssh"
-		ssh-keygen -t rsa -q -P "" -f "$HOME/.ssh/id_rsa"
+	if echo $SSH_AUTH_SOCK | grep gpg -q -v; then
+		if [ ! -e "$HOME/.ssh/id_rsa" ]; then
+			mkdir -p "$HOME/.ssh"
+			ssh-keygen -t rsa -q -P "" -f "$HOME/.ssh/id_rsa"
+		fi
 	fi
 	if [ ! -e "$HOME/.ssh/known_hosts" ]; then
 		touch "$HOME/.ssh/known_hosts"
