@@ -38,13 +38,20 @@ qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdro
 	if [ ! -e hda.tmp ]; then
 		qemu-img create -f qcow2 hda.tmp "$2"
 	fi
-	QEMU_CMD="qemu-system-x86_64 \
-    -daemonize \
+	QEMU_CMD="qemu-system-x86_64"
+	if [ ! -e OVMF_VARS_4M.ms.fd ]; then
+		cp /usr/share/OVMF/OVMF_VARS_4M.ms.fd .
+	fi
+	QEMU_CMD="$QEMU_CMD -machine q35"
+        QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE_4M.secboot.fd,readonly=on"
+        QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=1,file=./OVMF_VARS_4M.ms.fd"
+	QEMU_CMD="$QEMU_CMD \
     -pidfile qemu.pid \
     -hda hda.tmp \
     -cdrom $3 \
     -smp cpus=$(getconf _NPROCESSORS_ONLN) \
     -m 2048 \
+    -daemonize \
     -vga qxl \
     -vnc :0 \
     -net nic,model=virtio \
@@ -54,7 +61,6 @@ qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdro
 			QEMU_CMD="$QEMU_CMD -enable-kvm"
 		fi
 	fi
-	QEMU_CMD="$QEMU_CMD -bios /usr/share/OVMF/OVMF_CODE.fd"
 	echo "$QEMU_CMD"
 	if fuser qemu.pid; then
 		echo "Qemu is already running!"
