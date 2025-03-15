@@ -19,8 +19,10 @@ setup_virtual_env() { #helpmsg: Setup a virtual environment in current folder (i
 		if [ "$OSTYPE" == "msys" ]; then
 			if [ -e /c/Python310/python.exe ]; then
 				PYTHON3=/c/Python310/python.exe
-			else
+			elif [ -e /usr/bin/python3.7 ]; then
 				PYTHON3=/usr/bin/python3.7
+			else
+				PYTHON3="$(cygpath "C:\Program Files")/$(ls -1 "C:\Program Files" | grep "Python" | sort | tail -n 1)python.exe"
 			fi
 		else
 			PYTHON3=/usr/bin/python3
