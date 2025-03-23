@@ -22,6 +22,7 @@ setup_virtual_env() { #helpmsg: Setup a virtual environment in current folder (i
 			elif [ -e /usr/bin/python3.7 ]; then
 				PYTHON3=/usr/bin/python3.7
 			else
+				# shellcheck disable=SC2010
 				PYTHON3="$(cygpath "C:\Program Files")/$(ls -1 "C:\Program Files" | grep "Python" | sort | tail -n 1)python.exe"
 			fi
 		else

@@ -16,7 +16,7 @@ qemu_wait_for_ssh() { #helpmsg: Wait for SSH connection. Usage: wait_for_ssh "us
 
 qemu_copy_ssh_keys() { #helpmsg: Copy public key for SSH connection. Usage: copy_ssh_keys "user@host" "port"
 	install_debian_packages sshpass openssh-client
-	if echo $SSH_AUTH_SOCK | grep gpg -q -v; then
+	if echo "$SSH_AUTH_SOCK" | grep gpg -q -v; then
 		if [ ! -e "$HOME/.ssh/id_rsa" ]; then
 			mkdir -p "$HOME/.ssh"
 			ssh-keygen -t rsa -q -P "" -f "$HOME/.ssh/id_rsa"
@@ -43,8 +43,8 @@ qemu_launch() { #helpmsg: Start QEMU. Usage: lauch_qemu "port" "disk_size" "cdro
 		cp /usr/share/OVMF/OVMF_VARS_4M.ms.fd .
 	fi
 	QEMU_CMD="$QEMU_CMD -machine q35"
-        QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE_4M.secboot.fd,readonly=on"
-        QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=1,file=./OVMF_VARS_4M.ms.fd"
+	QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE_4M.secboot.fd,readonly=on"
+	QEMU_CMD="$QEMU_CMD -drive if=pflash,format=raw,unit=1,file=./OVMF_VARS_4M.ms.fd"
 	QEMU_CMD="$QEMU_CMD \
     -pidfile qemu.pid \
     -hda hda.tmp \
