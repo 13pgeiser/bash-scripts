@@ -69,10 +69,17 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 
 dockerfile_create() { #helpmsg: Start the dockerfile
 	mkdir -p "$(dirname "$DOCKERFILE")"
+	if [ -z "$1" ]; then
+		distrib="trixie"
+	else
+		distrib="$1"
+	fi
 	cat >"$DOCKERFILE" <<'EOF'
 # Automatically created!
 # DO NOT EDIT!
-FROM debian:trixie-slim
+EOF
+	echo "from debian:$distrib-slim" >>"$DOCKERFILE"
+	cat >>"$DOCKERFILE" <<'EOF'
 # Configure current user
 ARG USER=host_user
 ARG UID=1000
@@ -200,7 +207,7 @@ EOF
 COPY AppRun /work/AppDir/AppRun
 RUN set -ex \
     && chmod a+x /work/AppDir/AppRun \
-    && wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -P /work \
+    && wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -P /work \
     && chmod +x /work/appimagetool-x86_64.AppImage
 RUN chown -R ${USER}.${USER} /work
 EOF
