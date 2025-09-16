@@ -107,17 +107,18 @@ EOF
 dockerfile_setup_python() { #helpmsg: Install python3 + pip + setuptools + venv
 	cat >>"$DOCKERFILE" <<'EOF'
 # Install the bare minimum to use python
-RUN 	apt-get update && \
-        apt-get dist-upgrade -y && \
-        apt-get install -y --no-install-recommends \
-                git \
-                make \
-                python3-pip \
-                python3-setuptools \
-                python3-venv \
-                python3-wheel && \
-        apt-get clean && \
-        rm -rf /var/lib/apt/lists/*
+RUN set -ex \
+    && apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends \
+		git \
+		make \
+		python3-pip \
+		python3-setuptools \
+		python3-venv \
+		python3-wheel \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 EOF
 	if [ -f ./requirements.txt ]; then
 		cat <<EOF >>"$DOCKERFILE"
@@ -134,40 +135,40 @@ RUN set -ex \
     && apt-get update \
     && apt-get dist-upgrade -y \
     && apt-get install -y --no-install-recommends \
-	bc \
-	binfmt-support \
-	bison \
-	build-essential \
-	ca-certificates \
-	cpio \
-	curl \
-	debootstrap \
-	device-tree-compiler \
-	dh-exec \
-	fakeroot \
-	fdisk \
-	figlet \
-	flex \
-	git \
-	gzip \
-	libssl-dev \
-	kernel-wedge \
-	kmod \
-	ncurses-dev \
-	parted \
-	python \
-	python3 \
-	qemu-user-static \
-	quilt \
-	rsync \
-	swig \
-	u-boot-tools \
-	udev \
-	vboot-kernel-utils \
-	wget \
-	xz-utils \
-	zip \
-	zstd \
+		bc \
+		binfmt-support \
+		bison \
+		build-essential \
+		ca-certificates \
+		cpio \
+		curl \
+		debootstrap \
+		device-tree-compiler \
+		dh-exec \
+		fakeroot \
+		fdisk \
+		figlet \
+		flex \
+		git \
+		gzip \
+		libssl-dev \
+		kernel-wedge \
+		kmod \
+		ncurses-dev \
+		parted \
+		python \
+		python3 \
+		qemu-user-static \
+		quilt \
+		rsync \
+		swig \
+		u-boot-tools \
+		udev \
+		vboot-kernel-utils \
+		wget \
+		xz-utils \
+		zip \
+		zstd \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 EOF
@@ -180,25 +181,25 @@ RUN set -ex \
     && apt-get update \
     && apt-get dist-upgrade -y \
     && apt-get install -y --no-install-recommends \
-	git \
-	ca-certificates \
-	build-essential \
-	cmake \
-	autoconf \
-	automake \
-	libtool \
-	pkg-config \
-	wget \
-	xxd \
-	desktop-file-utils \
-	libglib2.0-dev \
-	libcairo2-dev \
-	fuse \
-	libfuse-dev \
-	zsync \
-	yasm \
-	strace \
-	adwaita-icon-theme \
+		git \
+		ca-certificates \
+		build-essential \
+		cmake \
+		autoconf \
+		automake \
+		libtool \
+		pkg-config \
+		wget \
+		xxd \
+		desktop-file-utils \
+		libglib2.0-dev \
+		libcairo2-dev \
+		fuse \
+		libfuse-dev \
+		zsync \
+		yasm \
+		strace \
+		adwaita-icon-theme \
     && apt-get clean \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 EOF
