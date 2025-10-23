@@ -67,7 +67,6 @@ install_zstd() {
 	msys)
 		local result
 		result=$(download_unpack 2109f0d91df9f98105ac993a62918400 https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-v1.5.2-win64.zip "ep" "" "")
-		echo "RES $result"
 		if [ ! -e "$TOOLS_FOLDER/bin/zstd" ]; then
 			mkdir -p "$TOOLS_FOLDER/bin"
 			cp "$result/zstd" "$TOOLS_FOLDER/bin"
