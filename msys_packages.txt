@@ -2,8 +2,8 @@ make 04d2bce62672bb702af8c3494619d2ba https://repo.msys2.org/msys/x86_64/make-4.
 tree c6a68c5481392ed742cf539134f0722e https://repo.msys2.org/msys/x86_64/tree-2.2.1-1-x86_64.pkg.tar.zst
 parallel ca9eb49237bc86aa72582f9775baa672 https://repo.msys2.org/msys/x86_64/parallel-20200322-1-any.pkg.tar.xz
 ninja-build eb7e2fd4ff9e70a67f8021823380f6f5 https://repo.msys2.org/msys/x86_64/ninja-1.11.1-1-x86_64.pkg.tar.zst
-subversion 15fe309caef5a61aba89bb5960a67103 https://repo.msys2.org/msys/x86_64/subversion-1.14.0-7-x86_64.pkg.tar.zst
-unrar 4617877eeadc8e684e9dd43d253da241 https://repo.msys2.org/msys/x86_64/unrar-6.1.4-2-x86_64.pkg.tar.zst gcc-libs
-gcc-libs 7f3f0e69fe83a67a6f118552c3227b01 https://repo.msys2.org/msys/x86_64/gcc-libs-11.3.0-2-x86_64.pkg.tar.zst
+subversion bdfde47dc00234dca1a7e209b7b85843 https://repo.msys2.org/msys/x86_64/subversion-1.14.2-11-x86_64.pkg.tar.zst
+unrar 707bd39bc4d1f24b09815f9623279b80 https://repo.msys2.org/msys/x86_64/unrar-7.1.9-1-x86_64.pkg.tar.zst gcc-libs
+gcc-libs 6a97c8f922fd2aa77506b0c45cc129fa https://repo.msys2.org/msys/x86_64/gcc-libs-15.1.0-2-x86_64.pkg.tar.zst
 gcc 712936e7ce648c9b3bde8b83a56bb073 https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev1/x86_64-12.2.0-release-posix-seh-rt_v10-rev1.7z
 unzip a80328327c685f70ea80e8f7f40ff714 https://downloads.sourceforge.net/project/natron/MINGW-packages/msys/unzip-6.0-2-x86_64.pkg.tar.xz
