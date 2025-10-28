@@ -200,6 +200,7 @@ install_package() { #helpmsg: Install package
 		md5="$(echo "$md5_url" | cut -d " " -f2)"
 		url="$(echo "$md5_url" | cut -d " " -f3)"
 		dependencies="$(echo "$md5_url" | cut -d " " -f4-)"
+		echo "Installing $1"
 		download_unpack "$md5" "$url" "" "" ""
 		if [ -n "$dependencies" ]; then
 			# shellcheck disable=SC2086
