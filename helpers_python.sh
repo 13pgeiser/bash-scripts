@@ -16,19 +16,10 @@ setup_virtual_env() { #helpmsg: Setup a virtual environment in current folder (i
 	fi
 	# Setup VENV
 	if [ ! -e "$(pwd)/venv" ]; then
-		if [ "$OSTYPE" == "msys" ]; then
-			if [ -e /c/Python310/python.exe ]; then
-				PYTHON3=/c/Python310/python.exe
-			elif [ -e /usr/bin/python3.7 ]; then
-				PYTHON3=/usr/bin/python3.7
-			else
-				# shellcheck disable=SC2010
-				PYTHON3="$(cygpath "C:\Program Files")/$(ls -1 "C:\Program Files" | grep "Python" | sort | tail -n 1)python.exe"
-			fi
-		else
+		if [ -z ${PYTHON3+x} ]; then
 			PYTHON3=/usr/bin/python3
-			install_debian_packages python3-venv python3-pip python3-setuptools python3-wheel
 		fi
+		install_debian_packages python3-venv python3-pip python3-setuptools python3-wheel
 		"$PYTHON3" -m venv "$(pwd)/venv"
 		"$VENV/python" -m pip install --upgrade pip
 		"$VENV/python" -m pip install setuptools wheel
