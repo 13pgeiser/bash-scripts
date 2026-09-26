@@ -70,7 +70,7 @@ docker_build_image_and_create_volume() { # create the volume for the home user a
 dockerfile_create() { #helpmsg: Start the dockerfile
 	mkdir -p "$(dirname "$DOCKERFILE")"
 	if [ -z "$1" ]; then
-		distrib="trixie"
+		distrib="debian:trixie-slim"
 	else
 		distrib="$1"
 	fi
@@ -78,7 +78,7 @@ dockerfile_create() { #helpmsg: Start the dockerfile
 # Automatically created!
 # DO NOT EDIT!
 EOF
-	echo "from debian:$distrib-slim" >>"$DOCKERFILE"
+	echo "from $distrib" >>"$DOCKERFILE"
 	cat >>"$DOCKERFILE" <<'EOF'
 # Configure current user
 ARG USER=host_user
