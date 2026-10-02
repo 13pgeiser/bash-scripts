@@ -29,13 +29,30 @@ docker_configure() { #helpmsg: Basic compatibility for MSYS
 
 run_shfmt_and_shellcheck() { #helpmsg: Execute shfmt and shellcheck
 	docker_configure
-	if [ -x "$(command -v parallel)" ]; then
-		parallel -v "$DOCKER_RUN_CMD" -v "$PWD":/mnt mvdan/shfmt -w /mnt/{} ::: "$@"
-		parallel -v "$DOCKER_RUN_CMD" -e SHELLCHECK_OPTS="" -v "$PWD":/mnt koalaman/shellcheck:stable -x {} ::: "$@"
+	if [ $# -eq 0 ]; then
+		return 0
+	fi
+	if command -v parallel >/dev/null 2>&1 && parallel --version 2>/dev/null | grep -q "GNU parallel"; then
+		echo "Using GNU parallel"
+		# GNU parallel: command template + job list via :::
+		parallel "$DOCKER_RUN_CMD -v \"$PWD\":/mnt mvdan/shfmt -w /mnt/{}" ::: "$@"
+		parallel "$DOCKER_RUN_CMD -e SHELLCHECK_OPTS= -v \"$PWD\":/mnt koalaman/shellcheck:stable -x {}" ::: "$@"
+	elif command -v parallel >/dev/null 2>&1; then
+		echo "Using moreutils parallel"
+		# moreutils parallel: one full command per argument after --
+		local cmds=() helper
+		for helper in "$@"; do
+			cmds+=("$DOCKER_RUN_CMD -v \"$PWD\":/mnt mvdan/shfmt -w /mnt/$helper")
+			cmds+=("$DOCKER_RUN_CMD -e SHELLCHECK_OPTS= -v \"$PWD\":/mnt koalaman/shellcheck:stable -x $helper")
+		done
+		parallel -- "${cmds[@]}"
 	else
+		# No parallel available: run sequentially
+		echo "Running sequentially"
+		local helper
 		for helper in "$@"; do
 			echo "$helper"
-			$DOCKER_RUN_CMD -v "$PWD":/mnt mvdan/shfmt -w /mnt/"$helper"
+			$DOCKER_RUN_CMD -v "$PWD":/mnt mvdan/shfmt -w "/mnt/$helper"
 			$DOCKER_RUN_CMD -e SHELLCHECK_OPTS="" -v "$PWD":/mnt koalaman/shellcheck:stable -x "$helper"
 		done
 	fi
