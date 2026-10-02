@@ -144,6 +144,7 @@ RUN set -ex \
 		curl \
 		debootstrap \
 		device-tree-compiler \
+		e2fsprogs \
 		dh-exec \
 		fakeroot \
 		fdisk \
@@ -151,14 +152,16 @@ RUN set -ex \
 		flex \
 		git \
 		gzip \
+		libelf-dev \
 		libssl-dev \
+		lsb-release \
 		kernel-wedge \
 		kmod \
 		ncurses-dev \
 		parted \
-		python \
 		python3 \
 		qemu-user-static \
+		qemu-user-binfmt \
 		quilt \
 		rsync \
 		swig \
