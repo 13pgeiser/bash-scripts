@@ -5,25 +5,25 @@
 # https://github.com/13pgeiser/bash-scripts.git
 
 docker_configure() { #helpmsg: Basic compatibility for MSYS
-	DOCKER_RUN_CMD=""
+	DOCKER_CMD=""
 	DOCKER_FLAGS=""
 	if [ "$OSTYPE" == "msys" ]; then
 		export MSYS_NO_PATHCONV=1
 	fi
-	if [ -x "$(command -v podman)" ]; then
-		alias docker=podman
-		DOCKER_RUN_CMD="podman"
-	elif [ -x "$(command -v docker)" ]; then
-		DOCKER_RUN_CMD="docker"
+	if [ -x "$(command -v docker)" ]; then
+		DOCKER_CMD="docker"
 		if [ "$OSTYPE" != "msys" ]; then
 			if [ "$(getent group docker)" ]; then
 				DOCKER_FLAGS="--group-add $(getent group docker | cut -d: -f3) -v /var/run/docker.sock:/var/run/docker.sock"
 			fi
 		fi
+	elif [ -x "$(command -v podman)" ]; then
+		DOCKER_CMD="podman"
 	else
-		DOCKER_RUN_CMD="echo docker"
+		DOCKER_CMD="echo docker"
 	fi
-	DOCKER_RUN_CMD="$DOCKER_RUN_CMD run --rm  $DOCKER_FLAGS -u $(id -u):$(id -g)"
+	DOCKER_RUN_CMD="$DOCKER_CMD run --rm  $DOCKER_FLAGS -u $(id -u):$(id -g)"
+	export DOCKER_CMD
 	export DOCKER_RUN_CMD
 }
 
@@ -59,11 +59,11 @@ docker_setup() { #helpmsg: Setup variables for docker: image, volume, ...
 }
 
 docker_build_image_and_create_volume() { # create the volume for the home user and build the docker image
-	docker volume create "$VOLUME_NAME"
+	$DOCKER_CMD volume create "$VOLUME_NAME"
 	(
 
 		cd docker || exit 1
-		docker build --tag "$IMAGE_NAME" --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER" .
+		$DOCKER_CMD build --tag "$IMAGE_NAME" --build-arg UID="$(id -u)" --build-arg GID="$(id -g)" --build-arg USER="$USER" .
 	)
 }
 
